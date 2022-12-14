@@ -40,6 +40,10 @@ class Item
 
     #[ORM\ManyToOne(inversedBy: 'items')]
     #[ORM\JoinColumn(nullable: false)]
+    #[
+        Assert\NotBlank,
+        Groups(['write', 'read'])
+    ]
     private ?User $user = null;
 
     #[ORM\OneToOne(mappedBy: 'item', cascade: ['persist', 'remove'])]
