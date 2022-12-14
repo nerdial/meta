@@ -1,0 +1,7 @@
+App\Entity\User:
+  user_1:
+    email: <email(4)>
+    role: 'seller'
+  user_2:
+    email: <email(4)>
+    role: 'buyer'

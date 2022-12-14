@@ -8,12 +8,18 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ApiResource(operations: [
-    new GetCollection()
-])]
+#[ApiResource(
+
+    operations: [
+        new GetCollection()
+    ],
+    normalizationContext: ['groups' => ['read']],
+    denormalizationContext: ['groups' => ['write']]
+
+)]
 class User
 {
     #[ORM\Id]
@@ -22,6 +28,9 @@ class User
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[
+        Groups(['read'])
+    ]
     private ?string $email = null;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Item::class, orphanRemoval: true)]
@@ -33,7 +42,11 @@ class User
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Transaction::class, orphanRemoval: true)]
     private Collection $transactions;
 
-
+    #[ORM\Column(length: 255)]
+    #[
+        Groups(['read'])
+    ]
+    private ?string $role = null;
 
 
     public function __construct()
@@ -146,6 +159,18 @@ class User
                 $transaction->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getRole(): ?string
+    {
+        return $this->role;
+    }
+
+    public function setRole(string $role): self
+    {
+        $this->role = $role;
 
         return $this;
     }
