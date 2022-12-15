@@ -4,17 +4,22 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Repository\AuctionRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: AuctionRepository::class)]
-#[ApiResource(operations: [
+#[ApiResource(
+    operations: [
     new Post(),
     new GetCollection(),
-    new Put(routeName: 'auction_buy', name: 'auction_buy')
-])]
+    new Patch()
+],
+    normalizationContext: ['groups' => ['read']],
+    denormalizationContext: ['groups' => ['write']])]
 class Auction
 {
     #[ORM\Id]
@@ -23,16 +28,28 @@ class Auction
     private ?int $id = null;
 
     #[ORM\Column]
+    #[
+        Groups(['read', 'write'])
+    ]
     private ?float $price = null;
 
     #[ORM\OneToOne(inversedBy: 'auction', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
+    #[
+        Groups(['write'])
+    ]
     private ?Item $item = null;
 
     #[ORM\ManyToOne(inversedBy: 'auctions')]
+    #[
+        Groups(['write'])
+    ]
     private ?User $buyer = null;
 
     #[ORM\OneToOne(mappedBy: 'auction', cascade: ['persist', 'remove'])]
+    #[
+        Groups(['read'])
+    ]
     private ?Transaction $transaction = null;
 
     public function getId(): ?int

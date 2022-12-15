@@ -61,7 +61,7 @@ class Item
     #[
         Groups(['read'])
     ]
-    private array $metadata = [];
+    private  array $metadata = [];
 
     public function getId(): ?int
     {
@@ -126,7 +126,7 @@ class Item
         return $this->metadata;
     }
 
-    public function setMetadata(?array $metadata): self
+    public function setMetadata(?array $metadata=[]): self
     {
         $this->metadata = $metadata;
 
