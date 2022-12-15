@@ -16,15 +16,41 @@ class ItemTest extends ApiTestCase
         $url = '/api/items';
         $newItem = [
             'title' => 'first item',
-            'user' => '/api/users/1'
+            'user' => '/api/users/1',
+            'description' => 'first description'
         ];
         static::createClient()->request(method: 'POST', url: $url, options: [
             'json' => $newItem
         ]);
+
         $this->assertResponseIsSuccessful();
         $this->assertJsonContains([
-            'title' => $newItem['title']
+            'title' => $newItem['title'],
+            'description' => $newItem['description']
         ]);
+    }
+
+    public function testCreateNewItemAndValidateMintedObject(): void
+    {
+
+        $url = '/api/items';
+        $newItem = [
+            'title' => 'second item',
+            'user' => '/api/users/1',
+            'description' => 'second description'
+        ];
+        $data = static::createClient()->request(method: 'POST', url: $url, options: [
+            'json' => $newItem
+        ]);
+
+        $this->assertResponseIsSuccessful();
+
+        $blockchainData = $data->toArray()['metadata'];
+
+        $this->assertNotNull($blockchainData);
+        $this->assertEquals($blockchainData['title'], $newItem['title']);
+        $this->assertEquals($blockchainData['description'], $newItem['description']);
+        $this->assertNotNull($blockchainData['address']);
     }
 
 
@@ -34,8 +60,9 @@ class ItemTest extends ApiTestCase
         $itemUrl = '/api/items';
         $auctionUrl = '/api/auctions';
         $newItem = [
-            'title' => 'second item',
-            'user' => '/api/users/1'
+            'title' => 'third item',
+            'user' => '/api/users/1',
+            'description' => 'third description'
         ];
         $res = static::createClient()->request(method: 'POST', url: $itemUrl, options: [
             'json' => $newItem
@@ -48,7 +75,7 @@ class ItemTest extends ApiTestCase
             'title' => $newItem['title']
         ]);
 
-        $res = static::createClient()->request(method: 'GET', url: $itemUrl);
+        static::createClient()->request(method: 'GET', url: $itemUrl);
 
         $newAuction = [
             'price' => 1000,
