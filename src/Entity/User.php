@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Get;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -14,7 +15,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
 
     operations: [
-        new GetCollection()
+        new GetCollection(),
+        new Get()
     ],
     normalizationContext: ['groups' => ['read']],
     denormalizationContext: ['groups' => ['write']]
@@ -47,6 +49,18 @@ class User
         Groups(['read'])
     ]
     private ?string $role = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[
+        Groups(['read'])
+    ]
+    private ?string $wallet_id = null;
+
+    #[ORM\Column(nullable: true)]
+    #[
+        Groups(['read'])
+    ]
+    private ?float $wallet_amount = null;
 
 
     public function __construct()
@@ -171,6 +185,30 @@ class User
     public function setRole(string $role): self
     {
         $this->role = $role;
+
+        return $this;
+    }
+
+    public function getWalletId(): ?string
+    {
+        return $this->wallet_id;
+    }
+
+    public function setWalletId(?string $wallet_id): self
+    {
+        $this->wallet_id = $wallet_id;
+
+        return $this;
+    }
+
+    public function getWalletAmount(): ?float
+    {
+        return $this->wallet_amount;
+    }
+
+    public function setWalletAmount(?float $wallet_amount): self
+    {
+        $this->wallet_amount = $wallet_amount;
 
         return $this;
     }

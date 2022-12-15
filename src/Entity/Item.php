@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ItemRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\GetCollection;
@@ -49,6 +50,19 @@ class Item
     #[ORM\OneToOne(mappedBy: 'item', cascade: ['persist', 'remove'])]
     private ?Auction $auction = null;
 
+    #[ORM\Column(type: Types::TEXT)]
+    #[
+        Assert\NotBlank,
+        Groups(['write', 'read'])
+    ]
+    private ?string $description = null;
+
+    #[ORM\Column(nullable: true)]
+    #[
+        Groups(['read'])
+    ]
+    private  array $metadata = [];
+
     public function getId(): ?int
     {
         return $this->id;
@@ -91,6 +105,30 @@ class Item
         }
 
         $this->auction = $auction;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getMetadata(): array
+    {
+        return $this->metadata;
+    }
+
+    public function setMetadata(?array $metadata=[]): self
+    {
+        $this->metadata = $metadata;
 
         return $this;
     }
