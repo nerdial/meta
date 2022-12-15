@@ -8,20 +8,34 @@ use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 class ItemTest extends ApiTestCase
 {
 
-//    use RefreshDatabaseTrait;
+//   use RefreshDatabaseTrait;
+
+
+    private string $seller = 'api/users/1';
+    private string $buyer = '/api/users/2';
+
+    private float $defaultWalletAmount = 100000;
+
+
+    private function createItem(array $data): \Symfony\Contracts\HttpClient\ResponseInterface
+    {
+        $url = '/api/items';
+
+        $request = static::createClient();
+
+        return $request->request(method: 'POST', url: $url, options: [
+            'json' => $data
+        ]);
+    }
 
     public function testCreateNewItem(): void
     {
-
-        $url = '/api/items';
         $newItem = [
             'title' => 'first item',
-            'user' => '/api/users/1',
-            'description' => 'first description'
+            'user' => $this->seller,
+            'description' => 'first description',
         ];
-        static::createClient()->request(method: 'POST', url: $url, options: [
-            'json' => $newItem
-        ]);
+        $this->createItem($newItem);
 
         $this->assertResponseIsSuccessful();
         $this->assertJsonContains([
@@ -32,16 +46,12 @@ class ItemTest extends ApiTestCase
 
     public function testCreateNewItemAndValidateMintedObject(): void
     {
-
-        $url = '/api/items';
         $newItem = [
             'title' => 'second item',
-            'user' => '/api/users/1',
+            'user' => $this->seller,
             'description' => 'second description'
         ];
-        $data = static::createClient()->request(method: 'POST', url: $url, options: [
-            'json' => $newItem
-        ]);
+        $data = $this->createItem($newItem);
 
         $this->assertResponseIsSuccessful();
 
@@ -53,41 +63,5 @@ class ItemTest extends ApiTestCase
         $this->assertNotNull($blockchainData['address']);
     }
 
-
-    public function testCreateNewItemAndThenCreateAuction(): void
-    {
-
-        $itemUrl = '/api/items';
-        $auctionUrl = '/api/auctions';
-        $newItem = [
-            'title' => 'third item',
-            'user' => '/api/users/1',
-            'description' => 'third description'
-        ];
-        $res = static::createClient()->request(method: 'POST', url: $itemUrl, options: [
-            'json' => $newItem
-        ]);
-
-        $itemId = $res->toArray()['@id'];
-
-        $this->assertResponseIsSuccessful();
-        $this->assertJsonContains([
-            'title' => $newItem['title']
-        ]);
-
-        static::createClient()->request(method: 'GET', url: $itemUrl);
-
-        $newAuction = [
-            'price' => 1000,
-            'item' => $itemId
-        ];
-
-        static::createClient()->request(method: 'POST', url: $auctionUrl, options: [
-            'json' => $newAuction
-        ]);
-        $this->assertResponseIsSuccessful();
-        $this->assertJsonContains($newAuction);
-
-    }
 
 }
