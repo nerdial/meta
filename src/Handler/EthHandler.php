@@ -40,8 +40,26 @@ class EthHandler
 
     }
 
-    public function moveToWallet(string $senderWalletId, string $receiverWalletId){}
+    public function moveNft(
+        string $senderWalletId,
+        string $receiverWalletId,
+        string $itemAddress): array
+    {
+        try {
+            $this->logger->info('nft moved to new address');
+            return [
+                'seller' => $$senderWalletId,
+                'buyer' => $receiverWalletId,
+                'oldAddress' => $itemAddress,
+                'newAddress' => 'https://api.etherscan.io/tx/' . bin2hex(random_bytes(60))
+            ];
 
+        } catch (\Exception $exception) {
+            $this->logger->error('Could not connect to eth blockchain.');
+            throw new \Exception($exception);
+        }
+
+    }
 
 
 }

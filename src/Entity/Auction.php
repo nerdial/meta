@@ -52,6 +52,9 @@ class Auction
     ]
     private ?Transaction $transaction = null;
 
+    #[ORM\Column(nullable: true)]
+    private array $metadata = [];
+
     public function getId(): ?int
     {
         return $this->id;
@@ -106,6 +109,18 @@ class Auction
         }
 
         $this->transaction = $transaction;
+
+        return $this;
+    }
+
+    public function getMetadata(): array
+    {
+        return $this->metadata;
+    }
+
+    public function setMetadata(?array $metadata): self
+    {
+        $this->metadata = $metadata;
 
         return $this;
     }
