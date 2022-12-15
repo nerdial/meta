@@ -48,7 +48,7 @@ class EthHandler
         try {
             $this->logger->info('nft moved to new address');
             return [
-                'seller' => $$senderWalletId,
+                'seller' => $senderWalletId,
                 'buyer' => $receiverWalletId,
                 'oldAddress' => $itemAddress,
                 'newAddress' => 'https://api.etherscan.io/tx/' . bin2hex(random_bytes(60))
