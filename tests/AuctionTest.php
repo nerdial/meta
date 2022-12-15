@@ -12,7 +12,7 @@ class AuctionTest extends ApiTestCase
 
     private float $defaultWalletAmount = 100000;
 
-    private function getUser(string $url): array
+    private function getObject(string $url): array
     {
         $request = static::createClient();
         return $request->request(method: 'GET', url: $url)->toArray();
@@ -121,6 +121,7 @@ class AuctionTest extends ApiTestCase
 
         $res = $this->buyAuction($buy, $auctionId);
 
+
         $this->assertResponseIsSuccessful();
 
         $json = $res->toArray();
@@ -138,16 +139,27 @@ class AuctionTest extends ApiTestCase
             "@type" => "Auction"
         ]);
 
-        $seller = $this->getUser($this->seller);
+        $seller = $this->getObject($this->seller);
 
-        $buyer = $this->getUser($this->buyer);
+        $buyer = $this->getObject($this->buyer);
 
         $remainingForSeller = $this->defaultWalletAmount + $auctionPrice;
         $remainingForBuyer = $this->defaultWalletAmount - $auctionPrice;
 
-
         $this->assertEquals($remainingForSeller, $seller['wallet_amount']);
         $this->assertEquals($remainingForBuyer, $buyer['wallet_amount']);
+
+        $newTransactionId = $json['transaction'];
+
+        $this->getObject($newTransactionId);
+
+        $this->assertJsonContains([
+            'amount' => $auctionPrice,
+            "@context" => "/api/contexts/Transaction",
+            "@id" => $newTransactionId,
+            "@type" => "Transaction",
+            'user' => $this->buyer
+        ]);
 
     }
 
