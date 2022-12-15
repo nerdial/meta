@@ -18,8 +18,8 @@ services:
             PMA_HOST: db
             PMA_PORT: 3306
             PMA_ARBITRARY: 1
-            PMA_USER: ${DB_USERNAME}
-            PMA_PASSWORD: ${DB_PASSWORD}
+            PMA_USER: root
+            PMA_PASSWORD: ''
         restart: always
         ports:
             - '8001:80'
