@@ -2,6 +2,10 @@ App\Entity\User:
   user_1:
     email: <email(4)>
     role: 'seller'
+    wallet_id: '32e72f2ebd3bd22d47c477d51181c8d02f00a8f08f2785a2d0da56644933cb7fb10c3409c015bbd9'
+    wallet_amount: 100000
   user_2:
     email: <email(4)>
     role: 'buyer'
+    wallet_id: '6c9ad4828fae2af15e006a1384986682f08d70f32d228704b22882fb2c256a971fc8fcaadf729d93'
+    wallet_amount: 100000
