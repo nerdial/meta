@@ -53,6 +53,9 @@ class Auction
     private ?Transaction $transaction = null;
 
     #[ORM\Column(nullable: true)]
+    #[
+        Groups(['read'])
+    ]
     private array $metadata = [];
 
     public function getId(): ?int
