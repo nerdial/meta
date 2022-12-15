@@ -5,14 +5,13 @@ namespace App\EventSubscriber;
 namespace App\EventSubscriber;
 
 use ApiPlatform\Symfony\EventListener\EventPriorities;
+use App\Handler\BlockchainHandler;
 use App\Entity\Item;
-use App\Service\BlockchainHandler;
-use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Doctrine\ORM\EntityManagerInterface;
 
 final class ItemSubscriber implements EventSubscriberInterface
 {

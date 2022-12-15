@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service;
+namespace App\Handler;
 
 use Psr\Log\LoggerInterface;
 
@@ -35,9 +35,13 @@ class EthHandler
 
         } catch (\Exception $exception) {
             $this->logger->error('Could not connect to eth blockchain.');
+            throw new \Exception($exception);
         }
 
     }
+
+    public function moveToWallet(string $senderWalletId, string $receiverWalletId){}
+
 
 
 }
