@@ -7,6 +7,7 @@ namespace App\EventSubscriber;
 use ApiPlatform\Symfony\EventListener\EventPriorities;
 use App\Handler\BlockchainHandler;
 use App\Entity\Item;
+use App\Service\ItemService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,8 +18,7 @@ final class ItemSubscriber implements EventSubscriberInterface
 {
 
 
-    public function __construct(private readonly BlockchainHandler $handler,
-                                private EntityManagerInterface     $manager)
+    public function __construct(private ItemService $itemService)
     {
     }
 
@@ -29,6 +29,9 @@ final class ItemSubscriber implements EventSubscriberInterface
         ];
     }
 
+    /**
+     * @throws \Exception
+     */
     public function createItemInBlockchain(ViewEvent $event): void
     {
         $item = $event->getControllerResult();
@@ -38,18 +41,8 @@ final class ItemSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $connector = $this->handler->getConnector();
-
-        $ethData = $connector->mintNft(
-            title: $item->getTitle(),
-            description: $item->getDescription(),
-            image: $item->getDescription()
+        $this->itemService->createItemInBlockchain(
+            item: $item
         );
-
-        $item->setMetadata($ethData);
-
-        $objectManger = $this->manager;
-        $objectManger->persist($item);
-        $objectManger->flush();
     }
 }
