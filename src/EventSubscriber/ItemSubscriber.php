@@ -2,13 +2,9 @@
 
 namespace App\EventSubscriber;
 
-namespace App\EventSubscriber;
-
 use ApiPlatform\Symfony\EventListener\EventPriorities;
-use App\Handler\BlockchainHandler;
 use App\Entity\Item;
 use App\Service\ItemService;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
@@ -18,7 +14,7 @@ final class ItemSubscriber implements EventSubscriberInterface
 {
 
 
-    public function __construct(private ItemService $itemService)
+    public function __construct(private readonly ItemService $itemService)
     {
     }
 
