@@ -7,7 +7,7 @@ use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
 class AuctionTest extends ApiTestCase
 {
 
-    private string $seller = 'api/users/1';
+    private string $seller = '/api/users/1';
     private string $buyer = '/api/users/2';
 
     private float $defaultWalletAmount = 100000;

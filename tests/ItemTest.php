@@ -11,11 +11,7 @@ class ItemTest extends ApiTestCase
 //   use RefreshDatabaseTrait;
 
 
-    private string $seller = 'api/users/1';
-    private string $buyer = '/api/users/2';
-
-    private float $defaultWalletAmount = 100000;
-
+    private string $seller = '/api/users/1';
 
     private function createItem(array $data): \Symfony\Contracts\HttpClient\ResponseInterface
     {
