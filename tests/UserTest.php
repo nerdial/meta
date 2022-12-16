@@ -3,6 +3,7 @@
 namespace App\Tests;
 
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
+use App\Entity\User;
 use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 
 class UserTest extends ApiTestCase
@@ -10,8 +11,14 @@ class UserTest extends ApiTestCase
 
     use RefreshDatabaseTrait;
 
-    private string $seller = '/api/users/1';
-    private string $buyer = '/api/users/2';
+    private string $seller;
+    private string $buyer;
+
+    protected function setUp(): void
+    {
+        $this->seller = $this->findIriBy(User::class, ['role' => 'seller']);
+        $this->buyer = $this->findIriBy(User::class, ['role' => 'buyer']);
+    }
 
     private function getObject(string $url): array
     {
@@ -21,7 +28,8 @@ class UserTest extends ApiTestCase
 
     public function testGetListOfDefaultUsers(): void
     {
-        $url = 'api/users';
+        $url = '/api/users';
+
         $response = static::createClient()->request(method: 'GET', url: $url);
         $json = $response->toArray();
         $this->assertResponseIsSuccessful();

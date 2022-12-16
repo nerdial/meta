@@ -3,14 +3,22 @@
 namespace App\Tests;
 
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
+use App\Entity\User;
 
 class AuctionTest extends ApiTestCase
 {
 
-    private string $seller = '/api/users/1';
-    private string $buyer = '/api/users/2';
+    private string $seller;
+    private string $buyer;
 
     private float $defaultWalletAmount = 100000;
+
+    protected function setUp(): void
+    {
+        $this->seller = $this->findIriBy(User::class, ['role' => 'seller']);
+        $this->buyer = $this->findIriBy(User::class, ['role' => 'buyer']);
+    }
+
 
     private function getObject(string $url): array
     {

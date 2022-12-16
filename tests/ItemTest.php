@@ -3,6 +3,7 @@
 namespace App\Tests;
 
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
+use App\Entity\User;
 use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 
 class ItemTest extends ApiTestCase
@@ -11,7 +12,13 @@ class ItemTest extends ApiTestCase
 //   use RefreshDatabaseTrait;
 
 
-    private string $seller = '/api/users/1';
+    private string $seller;
+
+    protected function setUp(): void
+    {
+        $this->seller = $this->findIriBy(User::class, ['role' => 'seller']);
+    }
+
 
     private function createItem(array $data): \Symfony\Contracts\HttpClient\ResponseInterface
     {
