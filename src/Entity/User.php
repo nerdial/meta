@@ -15,8 +15,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
 
     operations: [
-        new GetCollection(),
-        new Get()
+        new GetCollection(
+            openapiContext: [
+                'summary' => 'Get all users',
+                'description' => 'There are only 2 user types , seller , buyer'
+            ]),
+        new Get(
+            openapiContext: [
+                'summary' => 'Get a single user'
+            ]
+        )
     ],
     normalizationContext: ['groups' => ['read']],
     denormalizationContext: ['groups' => ['write']]

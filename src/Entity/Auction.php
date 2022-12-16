@@ -14,10 +14,22 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: AuctionRepository::class)]
 #[ApiResource(
     operations: [
-    new Post(),
-    new GetCollection(),
-    new Patch()
-],
+        new Post(
+            openapiContext: [
+                'summary' => 'Seller can create a new auction for others to buy the item',
+                'description' => 'Create a new auction by seller'
+            ]
+        ),
+        new GetCollection(),
+        new Patch(
+            uriTemplate: '/auctions/{id}/buy',
+            requirements: ['id' => '\d+'],
+            openapiContext: [
+                'summary' => 'Buyer purchases an item, Moves the minted item to its wallet and creates transaction',
+                'description' => 'The auction is already created by a seller, then a buyer comes and buys the action'
+            ]
+        )
+    ],
     normalizationContext: ['groups' => ['read']],
     denormalizationContext: ['groups' => ['write']])]
 class Auction

@@ -34,9 +34,10 @@ class AuctionTest extends ApiTestCase
         ]);
     }
 
-    private function buyAuction(array $data, string $id): \Symfony\Contracts\HttpClient\ResponseInterface
+    private function buyAuction(array $data, string $auction): \Symfony\Contracts\HttpClient\ResponseInterface
     {
-        $url = $id;
+        $url = $auction.'/buy';
+
         return static::createClient()->request(method: 'PATCH', url: $url, options: [
             'json' => $data,
             'headers' => [
@@ -121,6 +122,7 @@ class AuctionTest extends ApiTestCase
 
         $json = $data->toArray();
         $auctionId = $json["@id"];
+
 
         $buy = [
             'item' => $itemId,
